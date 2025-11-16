@@ -1,19 +1,23 @@
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Home() {
-  const navigate = useNavigate();
-
   return (
-    <div style={{ textAlign: "center", marginTop: "100px" }}>
+    <div style={{ textAlign: "center", marginTop: "80px" }}>
       <h1>Sistema de Vendas</h1>
 
-      <button onClick={() => navigate("/login")}>
-        Login
-      </button>
+      <div style={{ marginTop: "40px" }}>
+        <Link to="/login">
+          <button style={{ padding: "10px 20px", marginRight: "20px" }}>
+            Login
+          </button>
+        </Link>
 
-      <button onClick={() => navigate("/register")} style={{ marginLeft: "20px" }}>
-        Registrar
-      </button>
+        <Link to="/register">
+          <button style={{ padding: "10px 20px" }}>
+            Registrar
+          </button>
+        </Link>
+      </div>
     </div>
   );
 }

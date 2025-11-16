@@ -1,45 +1,64 @@
 import { useState } from "react";
-import api from "../services/api";
-import { useAuth } from "../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [msg, setMsg] = useState("");
-
-  const { login } = useAuth();
   const navigate = useNavigate();
 
-  async function handleSubmit(e) {
+  async function handleLogin(e) {
     e.preventDefault();
 
-    try {
-      const res = await api.post("/auth/login", { email, senha });
+    const res = await fetch("https://sistema-vendas-8a8p.onrender.com/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, senha }),
+    });
 
-      login(res.data.token); // salva token
-      navigate("/dashboard"); // redireciona
+    const data = await res.json();
 
-    } catch (err) {
-      setMsg("Email ou senha incorreto.");
+    if (!data.token) {
+      alert("Login inválido");
+      return;
     }
+
+    localStorage.setItem("token", data.token);
+    navigate("/dashboard");
   }
 
   return (
-    <div style={{ margin: "50px" }}>
-      <h2>Login</h2>
+    <div style={{ textAlign: "center", marginTop: "60px" }}>
+      <h1>Login</h1>
 
-      <form onSubmit={handleSubmit}>
-        <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+      <form onSubmit={handleLogin} style={{ marginTop: "20px" }}>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <br /><br />
+        <input
+          type="password"
+          placeholder="Senha"
+          value={senha}
+          onChange={(e) => setSenha(e.target.value)}
+          required
+        />
         <br /><br />
 
-        <input type="password" placeholder="Senha" value={senha} onChange={e => setSenha(e.target.value)} />
-        <br /><br />
-
-        <button type="submit">Entrar</button>
+        <button type="submit" style={{ padding: "10px 20px" }}>
+          Entrar
+        </button>
       </form>
 
-      {msg && <p>{msg}</p>}
+      <br /><br />
+
+      {/* Botão voltar ao início */}
+      <Link to="/">
+        <button>Voltar</button>
+      </Link>
     </div>
   );
 }

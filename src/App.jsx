@@ -1,14 +1,28 @@
-import React from "react";
-import Clientes from "./components/Clientes.jsx";
-import Produtos from "./components/Produtos.jsx";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Sistema de Vendas</h1>
-      <Clientes />
-      <Produtos />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

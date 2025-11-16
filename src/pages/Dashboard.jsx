@@ -1,13 +1,19 @@
-import { useAuth } from "../contexts/AuthContext";
-
 function Dashboard() {
-  const { logout } = useAuth();
+  function handleLogout() {
+    localStorage.removeItem("token");
+    window.location.href = "/";
+  }
 
   return (
-    <div style={{ margin: "50px" }}>
+    <div style={{ textAlign: "center", marginTop: "60px" }}>
       <h1>Bem-vindo ao Sistema de Vendas!</h1>
 
-      <button onClick={logout}>Sair</button>
+      <button
+        onClick={handleLogout}
+        style={{ padding: "10px 20px", marginTop: "20px" }}
+      >
+        Sair
+      </button>
     </div>
   );
 }
