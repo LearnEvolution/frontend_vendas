@@ -1,33 +1,39 @@
+// src/pages/Login.jsx
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [msg, setMsg] = useState("");
   const navigate = useNavigate();
 
   async function handleLogin(e) {
     e.preventDefault();
+    setMsg("");
 
     try {
-      const res = await fetch("https://sistema-vendas-8a8p.onrender.com/auth/login", {
+      const base = import.meta.env.VITE_API_URL || "";
+      const res = await fetch(`${base}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, senha }),
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
 
-      if (!res.ok) {
-        alert(data.message || "Email ou senha incorretos!");
+      if (!res.ok || !data.token) {
+        setMsg(data.msg || data.erro || "Email ou senha incorretos.");
         return;
       }
 
+      // salvar token localmente
       localStorage.setItem("token", data.token);
+      // redirecionar para dashboard
       navigate("/dashboard");
-      
-    } catch (error) {
-      alert("Erro ao conectar ao servidor");
+    } catch (err) {
+      console.error("Erro no login:", err);
+      setMsg("Erro de rede. Tente novamente.");
     }
   }
 
@@ -44,6 +50,7 @@ function Login() {
           required
         />
         <br /><br />
+
         <input
           type="password"
           placeholder="Senha"
@@ -58,7 +65,9 @@ function Login() {
         </button>
       </form>
 
-      <br /><br />
+      {msg && <p style={{ color: "red" }}>{msg}</p>}
+
+      <br />
 
       <Link to="/">
         <button>Voltar</button>
@@ -68,3 +77,4 @@ function Login() {
 }
 
 export default Login;
+

@@ -1,19 +1,19 @@
+// src/pages/Dashboard.jsx
+import { useNavigate } from "react-router-dom";
+
 function Dashboard() {
+  const navigate = useNavigate();
+
   function handleLogout() {
     localStorage.removeItem("token");
-    window.location.href = "/";
+    navigate("/"); // volta ao início
   }
 
   return (
-    <div style={{ textAlign: "center", marginTop: "60px" }}>
+    <div style={{ margin: "50px" }}>
       <h1>Bem-vindo ao Sistema de Vendas!</h1>
 
-      <button
-        onClick={handleLogout}
-        style={{ padding: "10px 20px", marginTop: "20px" }}
-      >
-        Sair
-      </button>
+      <button onClick={handleLogout}>Sair</button>
     </div>
   );
 }
