@@ -6,7 +6,7 @@ function Register() {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [mensagem, setMensagem] = useState(""); // NOVO
+  const [mensagem, setMensagem] = useState(""); // <-- nova linha
   const navigate = useNavigate();
 
   async function handleRegister(e) {
@@ -14,7 +14,7 @@ function Register() {
     setMensagem("");
 
     try {
-      const res = await fetch(`${API_URL}/auth/registrar`, {
+      const res = await fetch(`${API_URL}/auth/registrar`, {  // note o /registrar
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nome, email, senha }),
@@ -23,14 +23,14 @@ function Register() {
       const data = await res.json();
 
       if (res.ok) {
-        setMensagem("Usuário registrado com sucesso!"); // NOVO
-        setTimeout(() => navigate("/login"), 1500);
+        setMensagem("Usuário registrado com sucesso!");
+        setTimeout(() => navigate("/login"), 1500); // redireciona após 1,5s
       } else {
-        setMensagem(data.msg || "Erro ao registrar"); // NOVO
+        setMensagem(data.msg || "Não foi possível registrar");
       }
     } catch (err) {
       console.error("Erro ao registrar:", err);
-      setMensagem("Erro de rede. Tente novamente."); // NOVO
+      setMensagem("Erro de rede. Tente novamente.");
     }
   }
 
@@ -38,7 +38,11 @@ function Register() {
     <div style={{ textAlign: "center", marginTop: "60px" }}>
       <h1>Registrar</h1>
 
-      {mensagem && <p style={{ color: "red" }}>{mensagem}</p>} {/* NOVO */}
+      {mensagem && (
+        <div style={{ marginBottom: "20px", color: "blue", fontWeight: "bold" }}>
+          {mensagem}
+        </div>
+      )}
 
       <form onSubmit={handleRegister} style={{ marginTop: "20px" }}>
         <input
