@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { API_URL } from "../config";
-import { useAuth } from "../contexts/AuthContext";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -10,12 +9,11 @@ function Login() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const { setIsLogged } = useAuth();
 
   async function handleLogin(e) {
     e.preventDefault();
-    setMensagem("");      // limpa mensagens anteriores
-    setLoading(true);     // ativa "loading"
+    setMensagem("");
+    setLoading(true);
 
     try {
       const res = await fetch(`${API_URL}/auth/login`, {
@@ -32,16 +30,14 @@ function Login() {
         return;
       }
 
-      // --- Login OK ---
+      // salvar token
       localStorage.setItem("token", data.token);
-      setIsLogged(true); // garante que o Context atualize
 
       setMensagem("✅ Login realizado! Redirecionando...");
-      
-      // pequeno delay para garantir que tudo carregue corretamente
+
       setTimeout(() => {
         navigate("/dashboard");
-      }, 300);
+      }, 200);
 
     } catch (err) {
       console.error("Erro no login:", err);
@@ -55,7 +51,6 @@ function Login() {
     <div style={{ textAlign: "center", marginTop: "60px" }}>
       <h1>Login</h1>
 
-      {/* Mensagem visível na tela */}
       {mensagem && (
         <p style={{ marginTop: "20px", fontWeight: "bold" }}>
           {mensagem}
