@@ -9,21 +9,26 @@ function Login() {
   async function handleLogin(e) {
     e.preventDefault();
 
-    const res = await fetch("https://sistema-vendas-8a8p.onrender.com/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, senha }),
-    });
+    try {
+      const res = await fetch("https://sistema-vendas-8a8p.onrender.com/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, senha }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!data.token) {
-      alert("Login inválido");
-      return;
+      if (!res.ok) {
+        alert(data.message || "Email ou senha incorretos!");
+        return;
+      }
+
+      localStorage.setItem("token", data.token);
+      navigate("/dashboard");
+      
+    } catch (error) {
+      alert("Erro ao conectar ao servidor");
     }
-
-    localStorage.setItem("token", data.token);
-    navigate("/dashboard");
   }
 
   return (
@@ -55,7 +60,6 @@ function Login() {
 
       <br /><br />
 
-      {/* Botão voltar ao início */}
       <Link to="/">
         <button>Voltar</button>
       </Link>
