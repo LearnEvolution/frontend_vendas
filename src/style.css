@@ -1,96 +1,128 @@
-/* style.css - Login e Register */
-
-/* Fundo da página */
-body {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* =========================
+   Reset básico
+========================= */
+* {
   margin: 0;
   padding: 0;
-  height: 100vh;
+  box-sizing: border-box;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* =========================
+   Body
+========================= */
+body {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #333;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* Container dos formulários */
-div[style*="text-align: center"] {
-  background-color: rgba(255, 255, 255, 0.95);
-  padding: 40px 30px;
-  border-radius: 12px;
-  box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.2);
-  width: 90%;
-  max-width: 400px;
-}
-
-/* Título */
-h1 {
-  color: #333;
-  margin-bottom: 25px;
-  font-size: 28px;
-}
-
-/* Inputs */
-input {
+/* =========================
+   Container geral
+========================= */
+.container, .dashboard-container {
   width: 100%;
-  padding: 12px 15px;
-  margin: 8px 0;
+  max-width: 450px;
+  padding: 35px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  animation: fadeIn 0.7s ease-in-out;
+}
+
+/* =========================
+   Dashboard container
+========================= */
+.dashboard-container {
+  max-width: 600px;
+}
+
+/* =========================
+   Títulos
+========================= */
+h1 {
+  font-size: 28px;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+/* =========================
+   Inputs
+========================= */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 18px;
+  border-radius: 10px;
   border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 16px;
   transition: all 0.3s ease;
 }
 
-input:focus {
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 12px rgba(102, 126, 234, 0.5);
   outline: none;
-  border-color: #764ba2;
-  box-shadow: 0 0 8px rgba(118, 75, 162, 0.3);
 }
 
-/* Botões */
+/* =========================
+   Botões
+========================= */
 button {
-  background-color: #764ba2;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 12px 20px;
-  font-size: 16px;
   cursor: pointer;
+  padding: 12px 28px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
   transition: all 0.3s ease;
 }
 
 button:hover {
-  background-color: #667eea;
   transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
 }
 
-/* Links */
-a {
-  text-decoration: none;
+/* Botões secundários */
+.link-button {
+  background: linear-gradient(135deg, #764ba2, #667eea);
+  margin-top: 10px;
 }
 
-a button {
-  background-color: #f1f1f1;
-  color: #333;
+/* =========================
+   Mensagens
+========================= */
+.message {
+  font-weight: bold;
+  margin: 18px 0;
+  color: #d32f2f; /* vermelho para erro */
 }
 
-a button:hover {
-  background-color: #ddd;
-  color: #764ba2;
+.message.success {
+  color: #388e3c; /* verde para sucesso */
 }
 
-/* Mensagens de alerta (vai aparecer em cima do form, se você usar divs de mensagem) */
-.alert {
-  margin: 12px 0;
-  padding: 10px;
-  border-radius: 8px;
-  font-size: 14px;
-  color: #fff;
+/* =========================
+   Layout interno
+========================= */
+form div {
+  margin-bottom: 12px;
 }
 
-.alert-success {
-  background-color: #48bb78; /* verde */
-}
-
-.alert-error {
-  background-color: #f56565; /* vermelho */
+/* =========================
+   Animações
+========================= */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-15px); }
+  to { opacity: 1; transform: translateY(0); }
 }

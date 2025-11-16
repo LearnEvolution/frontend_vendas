@@ -6,12 +6,15 @@ import { API_URL } from "../config";
 function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [msg, setMsg] = useState(""); // mensagem na tela
+  const [mensagem, setMensagem] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   async function handleLogin(e) {
     e.preventDefault();
-    setMsg("");
+    setMensagem("");
+    setLoading(true);
 
     try {
       const res = await fetch(`${API_URL}/auth/login`, {
@@ -22,24 +25,37 @@ function Login() {
 
       const data = await res.json();
 
-      if (!data.token) {
-        setMsg(data.msg || "Email ou senha incorretos");
+      if (!res.ok || !data.token) {
+        setMensagem("❌ Email ou senha incorretos");
+        setLoading(false);
         return;
       }
 
       localStorage.setItem("token", data.token);
-      navigate("/dashboard");
+      setMensagem("✅ Login realizado! Redirecionando...");
+
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 200);
     } catch (err) {
       console.error("Erro no login:", err);
-      setMsg("Erro de rede. Tente novamente.");
+      setMensagem("❌ Erro de rede. Tente novamente.");
     }
+
+    setLoading(false);
   }
 
   return (
-    <div style={{ textAlign: "center", marginTop: "60px" }}>
+    <div className="container">
       <h1>Login</h1>
-      {msg && <p style={{ color: "red" }}>{msg}</p>}
-      <form onSubmit={handleLogin} style={{ marginTop: "20px" }}>
+
+      {mensagem && (
+        <p className={`message ${mensagem.includes("✅") ? "success" : ""}`}>
+          {mensagem}
+        </p>
+      )}
+
+      <form onSubmit={handleLogin}>
         <input
           type="email"
           placeholder="Email"
@@ -47,7 +63,6 @@ function Login() {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <br /><br />
         <input
           type="password"
           placeholder="Senha"
@@ -55,14 +70,11 @@ function Login() {
           onChange={(e) => setSenha(e.target.value)}
           required
         />
-        <br /><br />
-        <button type="submit" style={{ padding: "10px 20px" }}>
-          Entrar
-        </button>
+        <button type="submit">{loading ? "Entrando..." : "Entrar"}</button>
       </form>
-      <br />
+
       <Link to="/">
-        <button>Voltar</button>
+        <button className="link-button">Voltar</button>
       </Link>
     </div>
   );

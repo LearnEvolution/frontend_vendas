@@ -1,21 +1,18 @@
+// src/pages/Home.jsx
 import { Link } from "react-router-dom";
 
 function Home() {
   return (
-    <div style={{ textAlign: "center", marginTop: "80px" }}>
+    <div className="container">
       <h1>Sistema de Vendas</h1>
 
-      <div style={{ marginTop: "40px" }}>
+      <div>
         <Link to="/login">
-          <button style={{ padding: "10px 20px", marginRight: "20px" }}>
-            Login
-          </button>
+          <button>Login</button>
         </Link>
 
         <Link to="/register">
-          <button style={{ padding: "10px 20px" }}>
-            Registrar
-          </button>
+          <button>Registrar</button>
         </Link>
       </div>
     </div>

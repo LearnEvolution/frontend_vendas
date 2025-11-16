@@ -7,12 +7,12 @@ function Register() {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [msg, setMsg] = useState(""); // mensagem para tela
+  const [msg, setMsg] = useState("");
   const navigate = useNavigate();
 
   async function handleRegister(e) {
     e.preventDefault();
-    setMsg(""); // limpa mensagem anterior
+    setMsg("");
 
     try {
       const res = await fetch(`${API_URL}/auth/register`, {
@@ -25,7 +25,7 @@ function Register() {
 
       if (res.ok) {
         setMsg(data.msg || "Usuário registrado com sucesso!");
-        setTimeout(() => navigate("/login"), 1500); // redireciona para login
+        setTimeout(() => navigate("/login"), 1500);
       } else {
         setMsg(data.msg || "Não foi possível registrar");
       }
@@ -36,10 +36,11 @@ function Register() {
   }
 
   return (
-    <div style={{ textAlign: "center", marginTop: "60px" }}>
+    <div className="container">
       <h1>Registrar</h1>
-      {msg && <p style={{ color: "red" }}>{msg}</p>} {/* mostra mensagem */}
-      <form onSubmit={handleRegister} style={{ marginTop: "20px" }}>
+      {msg && <p className={`message ${msg.includes("sucesso") ? "success" : ""}`}>{msg}</p>}
+
+      <form onSubmit={handleRegister}>
         <input
           type="text"
           placeholder="Nome"
@@ -47,7 +48,6 @@ function Register() {
           onChange={(e) => setNome(e.target.value)}
           required
         />
-        <br /><br />
         <input
           type="email"
           placeholder="Email"
@@ -55,7 +55,6 @@ function Register() {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <br /><br />
         <input
           type="password"
           placeholder="Senha"
@@ -63,14 +62,11 @@ function Register() {
           onChange={(e) => setSenha(e.target.value)}
           required
         />
-        <br /><br />
-        <button type="submit" style={{ padding: "10px 20px" }}>
-          Registrar
-        </button>
+        <button type="submit">Registrar</button>
       </form>
-      <br />
+
       <Link to="/login">
-        <button>Voltar ao Login</button>
+        <button className="link-button">Voltar ao Login</button>
       </Link>
     </div>
   );
