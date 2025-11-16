@@ -3,6 +3,10 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
+// CSS
+import "./index.css";   // seu CSS global antigo
+import "./style.css";   // CSS novo para Login e Register
+
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
