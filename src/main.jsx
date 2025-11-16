@@ -15,7 +15,7 @@ function PrivateRoute({ children }) {
 
 createRoot(document.getElementById("root")).render(
   <AuthProvider>
-    <BrowserRouter basename={"/?v=" + __APP_VERSION__}>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
