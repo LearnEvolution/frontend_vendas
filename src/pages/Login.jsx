@@ -1,8 +1,8 @@
 // src/pages/Login.jsx
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { API_URL } from "../config";
-
+//import { API_URL } from "../config";
+const API_URL = import.meta.env.VITE_API_URL;
 function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
