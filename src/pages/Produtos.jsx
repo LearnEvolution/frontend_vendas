@@ -10,7 +10,8 @@ function Produtos() {
   const [produtos, setProdutos] = useState([]);
   const [total, setTotal] = useState(0);
 
-  const API_URL = "http://localhost:3000/produtos";
+  
+   const API_URL = import.meta.env.VITE_API_URL + "/produtos";
 
   // Buscar produtos do backend
   const carregarProdutos = async () => {
