@@ -1,128 +1,190 @@
 /* =========================
-   Reset básico
+   RESET E BASE
 ========================= */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Inter", sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  padding: 20px;
 }
 
 /* =========================
-   Body
+   CARD PADRÃO
 ========================= */
-body {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: #333;
-  min-height: 100vh;
+.card {
+  width: 100%;
+  max-width: 480px;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 25px;
+  padding: 35px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.6s ease;
+}
+
+/* =========================
+   TÍTULO GLOBAL
+========================= */
+.title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 25px;
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 10px;
 }
 
 /* =========================
-   Container geral
+   INPUTS
 ========================= */
-.container, .dashboard-container {
+.input,
+input {
   width: 100%;
-  max-width: 450px;
-  padding: 35px;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 16px;
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  animation: fadeIn 0.7s ease-in-out;
-}
-
-/* =========================
-   Dashboard container
-========================= */
-.dashboard-container {
-  max-width: 600px;
-}
-
-/* =========================
-   Títulos
-========================= */
-h1 {
-  font-size: 28px;
-  margin-bottom: 25px;
-  color: #333;
-}
-
-/* =========================
-   Inputs
-========================= */
-input[type="text"],
-input[type="email"],
-input[type="password"] {
-  width: 100%;
-  padding: 14px;
+  padding: 16px;
   margin-bottom: 18px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  transition: all 0.3s ease;
-}
-
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 12px rgba(102, 126, 234, 0.5);
-  outline: none;
-}
-
-/* =========================
-   Botões
-========================= */
-button {
-  cursor: pointer;
-  padding: 12px 28px;
-  margin-top: 10px;
-  border-radius: 10px;
+  border-radius: 14px;
   border: none;
-  font-weight: 600;
+  font-size: 16px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  transition: all 0.2s;
+}
+
+.input:focus,
+input:focus {
+  outline: none;
+  box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+}
+
+/* =========================
+   BOTÕES
+========================= */
+.btn-primary {
+  width: 100%;
+  padding: 16px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
   color: #fff;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-  transition: all 0.3s ease;
+  border: none;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-bottom: 12px;
 }
 
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
+.btn-primary:hover {
+  transform: scale(1.03);
+  box-shadow: 0 10px 25px rgba(80, 80, 255, 0.4);
 }
 
-/* Botões secundários */
-.link-button {
-  background: linear-gradient(135deg, #764ba2, #667eea);
-  margin-top: 10px;
+.btn-delete,
+.btnExcluir {
+  padding: 10px 16px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-delete:hover,
+.btnExcluir:hover {
+  transform: scale(1.1);
 }
 
 /* =========================
-   Mensagens
+   LISTA
 ========================= */
-.message {
-  font-weight: bold;
-  margin: 18px 0;
-  color: #d32f2f; /* vermelho para erro */
-}
-
-.message.success {
-  color: #388e3c; /* verde para sucesso */
-}
-
-/* =========================
-   Layout interno
-========================= */
-form div {
+.item {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 18px;
+  padding: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
   margin-bottom: 12px;
 }
 
 /* =========================
-   Animações
+   ANIMAÇÕES
 ========================= */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-15px); }
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================
+   ESTILO PERSONALIZADO PARA PRODUTOS
+========================= */
+
+.grad-produtos {
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(135deg, #4a00e0, #8e2de2);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.card-produtos,
+.produtos-modern { /* unificados */
+  background: white;
+  border-radius: 20px;
+  padding: 25px;
+  width: 95%;
+  max-width: 480px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.titulo {
+  display: flex;
+  align-items: center;
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.btn-produtos {
+  background: #6200ea;
+  color: white;
+  border: none;
+  padding: 12px;
+  width: 100%;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-produtos:hover {
+  background: #7b1ffa;
+}
+
+.listaTitulo {
+  margin-top: 25px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+}
+
+.vazio {
+  color: white;
+  text-align: center;
+  font-size: 16px;
+  margin-top: 10px;
 }

@@ -1,75 +1,147 @@
 // src/pages/Register.jsx
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { API_URL } from "../config.js";
+import { useState, useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext";
+import { useNavigate, Link } from "react-router-dom";
 
-function Register() {
+export default function Register() {
+  const { register } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   const [nome, setNome] = useState("");
+  const [telefone, setTelefone] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [msg, setMsg] = useState("");
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
-  async function handleRegister(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     setMsg("");
 
-    try {
-      const res = await fetch(`${API_URL}/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nome, email, senha }),
-      });
+    const result = await register(nome, email, senha, telefone);
 
-      const data = await res.json();
+    setLoading(false);
 
-      if (res.ok) {
-        setMsg(data.msg || "Usuário registrado com sucesso!");
-        setTimeout(() => navigate("/login"), 1500);
-      } else {
-        setMsg(data.msg || "Não foi possível registrar");
-      }
-    } catch (err) {
-      console.error("Erro ao registrar:", err);
-      setMsg("Erro de rede. Tente novamente.");
+    if (!result.success) {
+      setMsg(result.message);
+      return;
     }
-  }
+
+    setMsg("Cadastro realizado! Redirecionando...");
+    // **Vai para a rota de login explicitamente**
+    setTimeout(() => navigate("/login"), 1200);
+  };
 
   return (
-    <div className="container">
-      <h1>Registrar</h1>
-      {msg && <p className={`message ${msg.includes("sucesso") ? "success" : ""}`}>{msg}</p>}
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "linear-gradient(135deg, #6a11cb, #2575fc)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: 20,
+      }}
+    >
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          background: "rgba(255, 255, 255, 0.15)",
+          backdropFilter: "blur(10px)",
+          padding: "30px 35px",
+          borderRadius: 16,
+          width: "100%",
+          maxWidth: 400,
+          display: "flex",
+          flexDirection: "column",
+          boxShadow: "0 8px 20px rgba(0,0,0,0.2)",
+          color: "white",
+        }}
+      >
+        <h2 style={{ textAlign: "center", marginBottom: 20 }}>Criar Conta</h2>
 
-      <form onSubmit={handleRegister}>
+        {msg && (
+          <p
+            style={{
+              background: "rgba(0,0,0,0.3)",
+              padding: "10px",
+              borderRadius: 8,
+              textAlign: "center",
+              marginBottom: 10,
+            }}
+          >
+            {msg}
+          </p>
+        )}
+
         <input
-          type="text"
-          placeholder="Nome"
+          placeholder="Nome completo"
           value={nome}
           onChange={(e) => setNome(e.target.value)}
           required
+          style={inputStyle}
         />
+
         <input
-          type="email"
+          placeholder="Telefone (opcional)"
+          value={telefone}
+          onChange={(e) => setTelefone(e.target.value)}
+          style={inputStyle}
+        />
+
+        <input
           placeholder="Email"
+          type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          style={inputStyle}
         />
+
         <input
-          type="password"
           placeholder="Senha"
+          type="password"
           value={senha}
           onChange={(e) => setSenha(e.target.value)}
           required
+          style={inputStyle}
         />
-        <button type="submit">Registrar</button>
-      </form>
 
-      <Link to="/login">
-        <button className="link-button">Voltar ao Login</button>
-      </Link>
+        <button
+          type="submit"
+          disabled={loading}
+          style={{
+            marginTop: 15,
+            padding: "12px",
+            background: loading ? "#555" : "#00e676",
+            color: "#000",
+            fontWeight: "bold",
+            border: "none",
+            borderRadius: 10,
+            cursor: "pointer",
+          }}
+        >
+          {loading ? "Cadastrando..." : "Cadastrar"}
+        </button>
+
+        <div style={{ marginTop: 15, textAlign: "center" }}>
+          Já tem conta?{" "}
+          <Link to="/login" style={{ color: "#fff", textDecoration: "underline" }}>
+            Fazer login
+          </Link>
+        </div>
+      </form>
     </div>
   );
 }
 
-export default Register;
+const inputStyle = {
+  marginBottom: 12,
+  padding: "12px",
+  borderRadius: 10,
+  border: "none",
+  outline: "none",
+  background: "rgba(255,255,255,0.85)",
+  fontSize: 16,
+};

@@ -1,83 +1,116 @@
-// src/pages/Login.jsx
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
-//import { API_URL } from "../config";
-const API_URL = import.meta.env.VITE_API_URL;
-function Login() {
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const [mensagem, setMensagem] = useState("");
-  const [loading, setLoading] = useState(false);
 
+export default function Login() {
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  async function handleLogin(e) {
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [msg, setMsg] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    setMensagem("");
+    setMsg("");
     setLoading(true);
 
-    try {
-      const res = await fetch(`${API_URL}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, senha }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok || !data.token) {
-        setMensagem("❌ Email ou senha incorretos");
-        setLoading(false);
-        return;
-      }
-
-      localStorage.setItem("token", data.token);
-      setMensagem("✅ Login realizado! Redirecionando...");
-
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 200);
-    } catch (err) {
-      console.error("Erro no login:", err);
-      setMensagem("❌ Erro de rede. Tente novamente.");
-    }
+    const result = await login(email, senha);
 
     setLoading(false);
-  }
+
+    if (!result.success) {
+      setMsg(result.message);
+      return;
+    }
+
+    setMsg("Entrando...");
+    setTimeout(() => navigate("/dashboard"), 800);
+  };
 
   return (
-    <div className="container">
-      <h1>Login</h1>
+    <div style={{
+      minHeight: "100vh",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      background: "linear-gradient(135deg, #6a11cb, #2575fc)",
+      padding: 20
+    }}>
+      <form
+        onSubmit={handleLogin}
+        style={{
+          width: "100%",
+          maxWidth: 420,
+          background: "rgba(255,255,255,0.12)",
+          padding: 30,
+          borderRadius: 20,
+          color: "#fff",
+          backdropFilter: "blur(12px)",
+          boxShadow: "0 8px 25px rgba(0,0,0,0.15)"
+        }}
+      >
+        <h2 style={{ textAlign: "center", marginBottom: 20 }}>Entrar</h2>
 
-      {mensagem && (
-        <p className={`message ${mensagem.includes("✅") ? "success" : ""}`}>
-          {mensagem}
-        </p>
-      )}
+        {msg && (
+          <p style={{ textAlign: "center", marginBottom: 10 }}>
+            {msg}
+          </p>
+        )}
 
-      <form onSubmit={handleLogin}>
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          style={inputStyle}
           required
         />
+
         <input
           type="password"
           placeholder="Senha"
           value={senha}
           onChange={(e) => setSenha(e.target.value)}
+          style={inputStyle}
           required
         />
-        <button type="submit">{loading ? "Entrando..." : "Entrar"}</button>
-      </form>
 
-      <Link to="/">
-        <button className="link-button">Voltar</button>
-      </Link>
+        <button
+          type="submit"
+          disabled={loading}
+          style={{
+            width: "100%",
+            padding: "12px 15px",
+            background: loading ? "#666" : "#00e676",
+            border: "none",
+            borderRadius: 10,
+            color: "#000",
+            fontWeight: "bold",
+            cursor: "pointer",
+            marginTop: 5
+          }}
+        >
+          {loading ? "Entrando..." : "Entrar"}
+        </button>
+
+        <p style={{ textAlign: "center", marginTop: 20 }}>
+          Não tem conta?{" "}
+          <Link to="/register" style={{ color: "#fff", textDecoration: "underline" }}>
+            Criar conta
+          </Link>
+        </p>
+      </form>
     </div>
   );
 }
 
-export default Login;
+const inputStyle = {
+  width: "100%",
+  marginBottom: 15,
+  padding: "12px 15px",
+  borderRadius: 10,
+  border: "none",
+  outline: "none"
+};
