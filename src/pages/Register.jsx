@@ -16,10 +16,32 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setMsg("");
 
-    const result = await register(nome, email, senha, telefone);
+    // -----------------------
+    // VALIDAÇÕES DO FRONT
+    // -----------------------
+
+    if (!nome.trim()) {
+      return setMsg("Digite seu nome completo.");
+    }
+
+    if (!email.trim()) {
+      return setMsg("Digite um e-mail válido.");
+    }
+
+    if (!email.includes("@") || !email.includes(".")) {
+      return setMsg("Formato de e-mail inválido.");
+    }
+
+    if (senha.length < 4) {
+      return setMsg("A senha precisa ter pelo menos 4 caracteres.");
+    }
+
+    setLoading(true);
+
+    // ENVIAR PARA O CONTEXTO NA ORDEM CERTA!!!
+    const result = await register(nome, email, telefone, senha);
 
     setLoading(false);
 
@@ -29,7 +51,6 @@ export default function Register() {
     }
 
     setMsg("Cadastro realizado! Redirecionando...");
-    // **Vai para a rota de login explicitamente**
     setTimeout(() => navigate("/login"), 1200);
   };
 
@@ -79,7 +100,6 @@ export default function Register() {
           placeholder="Nome completo"
           value={nome}
           onChange={(e) => setNome(e.target.value)}
-          required
           style={inputStyle}
         />
 
@@ -95,7 +115,6 @@ export default function Register() {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          required
           style={inputStyle}
         />
 
@@ -104,7 +123,6 @@ export default function Register() {
           type="password"
           value={senha}
           onChange={(e) => setSenha(e.target.value)}
-          required
           style={inputStyle}
         />
 
@@ -145,3 +163,4 @@ const inputStyle = {
   background: "rgba(255,255,255,0.85)",
   fontSize: 16,
 };
+

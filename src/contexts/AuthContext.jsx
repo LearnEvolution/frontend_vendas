@@ -1,11 +1,9 @@
-// src/contexts/AuthContext.jsx
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
+import { API_URL } from "../config";
 
 export const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -20,81 +18,38 @@ export function AuthProvider({ children }) {
     }
 
     if (savedUser) {
-      try {
-        setUser(JSON.parse(savedUser));
-      } catch (e) {
-        console.warn("failed parsing saved user", e);
-        localStorage.removeItem("user");
-      }
+      setUser(JSON.parse(savedUser));
     }
 
     setLoading(false);
   }, []);
 
-  // LOGIN robusto: aceita várias formas de resposta do backend
   const login = async (email, senha) => {
     try {
-      const res = await axios.post(`${API_URL}/auth/login`, {
-        email,
-        senha,
-      });
+      const res = await axios.post(`${API_URL}/auth/login`, { email, senha });
 
-      const data = res.data || {};
+      const token = res.data.token;
+      const usuario = { email };
 
-      const token = data.token || data.accessToken || null;
-
-      // tenta extrair um objeto user/usuario retornado pelo backend
-      const returnedUser =
-        data.usuario || data.user || data.usuarioLogado || data.usuario_login || null;
-
-      let usuario = null;
-
-      if (returnedUser && typeof returnedUser === "object") {
-        // se veio um objeto de usuário, usamos ele
-        usuario = returnedUser;
-      } else if (returnedUser && typeof returnedUser === "string") {
-        // se veio algo simples (ex: email), normalizamos
-        usuario = { email: returnedUser };
-      } else if (data.email) {
-        // se o backend devolveu o email no body
-        usuario = { email: data.email };
-      } else if (email) {
-        // fallback: usamos o email que o usuário digitou
-        usuario = { email };
-      }
-
-      if (!token) {
-        // ainda aceitamos login sem token (depende da sua API) — mas avisamos
-        return { success: false, message: "Token não recebido" };
-      }
-
-      // salva token e usuário localmente
       localStorage.setItem("token", token);
-      if (usuario) {
-        try {
-          localStorage.setItem("user", JSON.stringify(usuario));
-        } catch (e) {
-          console.warn("Erro ao salvar user no localStorage", e);
-        }
-      }
-
+      localStorage.setItem("user", JSON.stringify(usuario));
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
       setUser(usuario);
-
       return { success: true };
+
     } catch (err) {
       return { success: false, message: err.response?.data?.msg || "Erro no login" };
     }
   };
 
-  const register = async (nome, email, senha, telefone) => {
+  const register = async (nome, email, telefone, senha) => {
     try {
       const res = await axios.post(`${API_URL}/auth/register`, {
         nome,
         email,
-        senha,
         telefone,
+        senha,
       });
 
       return { success: true, message: res.data.msg };
