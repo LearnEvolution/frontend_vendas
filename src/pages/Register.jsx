@@ -30,8 +30,11 @@ export default function Register() {
       return setMsg("Digite um e-mail válido.");
     }
 
-    if (!email.includes("@") || !email.includes(".")) {
-      return setMsg("Formato de e-mail inválido.");
+    // Regex de validação profissional
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!emailRegex.test(email.trim())) {
+      return setMsg("Digite um e-mail válido.");
     }
 
     if (senha.length < 4) {
@@ -40,7 +43,7 @@ export default function Register() {
 
     setLoading(true);
 
-    // ENVIAR PARA O CONTEXTO NA ORDEM CERTA!!!
+    // Segue a ORDEM correta para enviar ao backend
     const result = await register(nome, email, telefone, senha);
 
     setLoading(false);
@@ -163,4 +166,3 @@ const inputStyle = {
   background: "rgba(255,255,255,0.85)",
   fontSize: 16,
 };
-
